@@ -1,50 +1,62 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+Version change: unspecified → 1.0.0
+Modified principles: (placeholders → concrete)
+Added sections: Technology & Constraints, Development Workflow
+Removed sections: none
+Templates requiring updates:
+  - .specify/templates/plan-template.md: ⚠ pending (verify Constitution Check gates align)
+  - .specify/templates/spec-template.md: ⚠ pending (ensure tech-stack constraints are surfaced)
+  - .specify/templates/tasks-template.md: ⚠ pending (task categories validated)
+Follow-up TODOs:
+  - TODO(RATIFICATION_DATE): confirm ratification authority if different from author
+-->
+
+# Petstore Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Customer-first Commerce
+All product and UX decisions MUST prioritize a safe, simple, and privacy-respecting shopping experience for customers. Checkout flows MUST be secure (HTTPS, CSRF protections), cart state MUST persist reliably, and accessibility standards (WCAG AA) MUST be met for all public-facing pages.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Rationale: User trust is core to e-commerce; measuring conversions and complaints will validate compliance.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Test-First Quality (NON-NEGOTIABLE)
+Code changes that introduce functionality MUST include automated tests before merge: unit tests for business logic, integration tests for API boundaries, and end-to-end tests for critical user journeys (signup, browse, add-to-cart, checkout). All CI pipelines MUST fail on test regressions.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+Rationale: Prevent regressions and ensure safe, incremental delivery.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Observability & Reliability
+Services MUST emit structured logs, metrics, and traces. Error conditions MUST be captured with context sufficient to reproduce failures. Alerts MUST exist for high-severity failures (payment errors, DB connectivity loss, deployment rollbacks). Recovery runbooks MUST be documented for critical incidents.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Rationale: Fast detection and recovery reduce downtime and business impact.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. API-First & Semantic Versioning
+Public APIs and backend contracts MUST be designed and versioned explicitly. Backward-incompatible changes are MAJOR bumps; additive changes are MINOR; non-behavioral clarifications are PATCH. Contract changes MUST include migration plans and compatibility tests.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Rationale: Clear contracts enable safe evolution and integration with frontend and external services.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Approved Tech Stack & Deployment Constraints
+The canonical stack for Petstore is Java Spring Boot (backend), PostgreSQL (data), React + MUI + Tailwind (frontend). Deployments target Render. Use of alternative languages, frameworks, or hosting MUST be approved and documented.
+
+Rationale: Consistency across projects reduces operational burden and accelerates onboarding.
+
+## Technology & Constraints
+- Database: PostgreSQL (managed). Migration tooling (e.g., Flyway or Liquibase) MUST be used for schema changes.
+- Backend: Java 17+ with Spring Boot. Services MUST expose OpenAPI contracts for external integrations.
+- Java package base: com.delapena.petstore (use this base package for all backend modules).
+- Frontend: React (v18+) using MUI components and Tailwind for utility styles. UI components MUST be accessible and themable.
+- CI/CD: Pipeline MUST run tests, linters, and build artifacts; deployments to Render MUST be gated on passing pipelines.
+
+## Development Workflow
+- Branching: Feature branches follow `[feature/<short-desc>]` naming. Pull requests MUST include a link to a spec or plan and reference relevant tasks.
+- Reviews: At least one approving review is REQUIRED for non-trivial changes; critical changes (security, payments, DB migrations) require two reviewers.
+- Infrastructure changes: DB migrations and infra modifications MUST be reviewed and accompanied by rollback instructions.
+- Release process: Releases follow semantic versioning; a changelog entry is REQUIRED for MINOR and MAJOR releases.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+- Amendments: Amendments to this constitution require a documented proposal, review by at least two maintainers, and a majority approval. Major governance changes (removing or redefining principles) are MAJOR version bumps.
+- Compliance: Every PR MUST include a short compliance checklist referencing affected principles. Build pipelines or reviewers MUST verify constitution gates where applicable.
+- Versioning Policy: MAJOR for incompatible governance/principle removals or redefinitions; MINOR for added principles or material expansions; PATCH for clarifications, typos, or non-semantic refinements.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-04-30 | **Last Amended**: 2026-04-30

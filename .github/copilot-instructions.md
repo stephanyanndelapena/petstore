@@ -1,4 +1,4 @@
 <!-- SPECKIT START -->
-For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
+IMPL_PLAN: C:\spec-kit\petstore\specs\001-listing-page\plan.md
+FEATURE_SPEC: C:\spec-kit\petstore\specs\001-listing-page\spec.md
 <!-- SPECKIT END -->

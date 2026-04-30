@@ -1,0 +1,19 @@
+groups:
+  - name: petstore-listings.rules
+    rules:
+      - alert: PetstoreListingAPILatencyHigh
+        expr: histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{uri=~"/delapena/v1/pets.*"}[5m])) by (le)) > 1
+        for: 5m
+        labels:
+          severity: page
+        annotations:
+          summary: "Listing API latency is high (p95 > 1s)"
+          description: "The listing API p95 latency is > 1s for the last 5 minutes. Check service healthy, DB queries, and CDN responses."
+      - alert: PetstoreListingAPIErrors
+        expr: sum(rate(http_server_requests_seconds_count{uri=~"/delapena/v1/pets.*", status=~"5.."}[5m])) > 0
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: "Listing API returning 5xx errors"
+          description: "The listing API is returning 5xx errors. Investigate recent deployments, DB connectivity, and resource exhaustion."
