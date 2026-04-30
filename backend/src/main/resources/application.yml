@@ -10,7 +10,7 @@ spring:
 
 # Disable Flyway by default to allow automatic schema creation via JPA for quick dev runs.
 flyway:
-  enabled: false
+  enabled: true
   locations: classpath:db/migration
 
 management:
