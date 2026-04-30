@@ -1,0 +1,36 @@
+openapi: 3.0.1
+info:
+  title: Petstore Listings API
+  version: '1.0.0'
+paths:
+  /delapena/v1/pets:
+    get:
+      summary: List pets
+      parameters:
+        - in: query
+          name: species
+          schema:
+            type: string
+        - in: query
+          name: min_price
+          schema:
+            type: integer
+        - in: query
+          name: max_price
+          schema:
+            type: integer
+        - in: query
+          name: availability
+          schema:
+            type: string
+        - in: query
+          name: page_cursor
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
