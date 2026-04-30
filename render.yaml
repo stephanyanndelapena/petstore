@@ -1,0 +1,31 @@
+# Render manifest for petstore
+# Deploys a Postgres database, the Java backend, and the React frontend
+
+databases:
+  - name: petstore-db
+    engine: postgresql
+    version: "15"
+    plan: starter
+
+services:
+  - type: web
+    name: petstore-backend
+    env: java
+    region: oregon
+    buildCommand: mvn -f backend -DskipTests package
+    startCommand: java -jar backend/target/petstore-backend-0.1.0-SNAPSHOT.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: DATABASE_URL
+        fromDatabase:
+          name: petstore-db
+          property: connectionString
+    plan: starter
+
+static_sites:
+  - name: petstore-frontend
+    region: oregon
+    buildCommand: cd frontend && npm ci && npm run build
+    publishPath: frontend/dist
+    plan: starter
