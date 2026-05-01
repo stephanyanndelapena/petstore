@@ -27,14 +27,14 @@ US1 (P1): View paginated listings
 - [ ] T015 [US1] Implement listPets service method in backend\src\main\java\com\delapena\petstore\catalog\PetService.java
 - [ ] T016 [US1] Implement GET /delapena/v1/pets controller handler in backend\src\main\java\com\delapena\petstore\catalog\PetController.java
 - [ ] T017 [P] [US1] Implement apiClient.getPets in frontend\src\services\apiClient.js
-- [ ] T018 [US1] Create ListingPage component at frontend\src\components\ListingPage\ListingPage.jsx
+- [X] T018 [US1] Create ListingPage component at frontend\src\components\ListingPage\ListingPage.jsx
 - [ ] T019 [US1] Create unit test PetServiceTest at backend\src\test\java\com\delapena\petstore\catalog\PetServiceTest.java
 - [ ] T020 [US1] Create integration test PetControllerTest at backend\src\test\java\com\delapena\petstore\catalog\PetControllerTest.java
 
 US2 (P2): Filter, sort, pagination
 
 - [ ] T021 [US2] Implement filtering in PetRepository/PetService (species, price, availability) at backend\src\main\java\com\delapena\petstore\catalog\PetRepositoryCustomImpl.java (implement methods: findByFilters(species, minPrice, maxPrice, availability, cursor, limit))
-- [ ] T022 [P] [US2] Implement UI filter controls at frontend\src\components\ListingPage\Filters.jsx
+- [X] T022 [P] [US2] Implement UI filter controls at frontend\src\components\ListingPage\Filters.jsx
 - [ ] T023 [US2] Implement sorting and cursor-based pagination in backend\src\main\java\com\delapena\petstore\catalog\PetService.java
 - [ ] T024 [P] [US2] Implement frontend sort & pagination at frontend\src\components\ListingPage\Pagination.jsx
 - [ ] T025 [US2] Create contract test for GET /delapena/v1/pets at backend\src\test\java\com\delapena\petstore\contracts\GetPetsContractTest.java
