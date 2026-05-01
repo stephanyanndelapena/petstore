@@ -6,7 +6,7 @@
 body {
   font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
   margin: 0;
-  background-color: #f8fafc; /* gray-50 */
+  background-color: #F8F9F5; /* soft cream background */
 }
 
 /* Use plain CSS for .container to avoid @apply issues in some Tailwind setups */
