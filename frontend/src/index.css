@@ -9,16 +9,18 @@ body {
   background-color: #F8F9F5; /* soft cream background */
 }
 
-/* Use plain CSS for .container to avoid @apply issues in some Tailwind setups */
-.container {
-  max-width: 72rem; /* approx max-w-6xl */
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem; /* px-4 */
-  padding-right: 1rem;
+* {
+  box-sizing: border-box;
 }
 
-/* Simple line clamp helper (avoids Tailwind plugin requirement) */
+.container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;

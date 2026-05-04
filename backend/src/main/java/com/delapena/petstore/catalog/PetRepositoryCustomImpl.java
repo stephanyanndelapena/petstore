@@ -19,14 +19,27 @@ public class PetRepositoryCustomImpl implements PetRepositoryCustom {
     private EntityManager em;
 
     @Override
-    public List<Pet> findByFilters(String species, Integer minPrice, Integer maxPrice, String availability, String cursor, int limit) {
+    public List<Pet> findByFilters(List<String> species, String search, Integer minPrice, Integer maxPrice, String availability, String cursor, int limit) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Pet> cq = cb.createQuery(Pet.class);
         Root<Pet> root = cq.from(Pet.class);
 
         List<Predicate> preds = new ArrayList<>();
         if (species != null && !species.isEmpty()) {
-            preds.add(cb.equal(root.get("species"), species));
+            // Convert to uppercase to match DB records (DOG, CAT, etc) and ensure robust matching
+            List<String> upperSpecies = species.stream()
+                .filter(s -> s != null)
+                .map(String::toUpperCase)
+                .toList();
+            if (!upperSpecies.isEmpty()) {
+                preds.add(root.get("species").in(upperSpecies));
+            }
+        }
+        if (search != null && !search.trim().isEmpty()) {
+            String pattern = "%" + search.trim().toLowerCase() + "%";
+            Predicate nameMatch = cb.like(cb.lower(root.get("name")), pattern);
+            Predicate descMatch = cb.like(cb.lower(root.get("shortDescription")), pattern);
+            preds.add(cb.or(nameMatch, descMatch));
         }
         if (minPrice != null) {
             preds.add(cb.ge(root.get("priceCents"), minPrice));

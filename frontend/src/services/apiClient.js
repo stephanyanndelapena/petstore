@@ -8,8 +8,17 @@ function safeParseImages(images) {
 
 export async function getPets(query = {}) {
   const params = new URLSearchParams();
-  Object.entries(query).forEach(([k, v]) => { if (v !== undefined && v !== null) params.append(k, v); });
-  const url = `${API_BASE}/pets${params.toString() ? `?${params.toString()}` : ''}`;
+  Object.entries(query).forEach(([k, v]) => { 
+    if (v !== undefined && v !== null) {
+      if (Array.isArray(v)) {
+        v.forEach(val => params.append(k, val));
+      } else {
+        params.append(k, v);
+      }
+    } 
+  });
+  const queryString = params.toString();
+  const url = `${API_BASE}/pets${queryString ? `?${queryString}` : ''}`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`API error ${res.status}`);
   const json = await res.json();
