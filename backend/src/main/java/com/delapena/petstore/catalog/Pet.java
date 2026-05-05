@@ -1,6 +1,8 @@
 package com.delapena.petstore.catalog;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -8,26 +10,41 @@ import java.util.UUID;
 @Table(name = "pets")
 public class Pet {
     @Id
+    @Column(name = "id")
     private UUID id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "species")
     private String species;
 
+    @Column(name = "age_years")
     private Integer ageYears;
 
+    @Column(name = "price_cents")
     private Integer priceCents;
 
+    @Column(name = "availability_status")
     private String availabilityStatus;
 
-    @Column(columnDefinition = "jsonb")
+    @Column(name = "images", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String images;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "short_description")
     private String shortDescription;
 
+    @Column(name = "seller_id")
     private UUID sellerId;
 
+    @Column(name = "created_at")
     private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at")
     private OffsetDateTime updatedAt;
 
     public Pet() {}
@@ -53,6 +70,9 @@ public class Pet {
 
     public String getImages() { return images; }
     public void setImages(String images) { this.images = images; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public String getShortDescription() { return shortDescription; }
     public void setShortDescription(String shortDescription) { this.shortDescription = shortDescription; }

@@ -5,7 +5,7 @@ import Chip from '@mui/material/Chip';
 
 export default function ListingCard({ pet, onAddToCart, onEdit, onDelete }) {
   const brandBlue = '#1E3A8A';
-  const imgSrc = pet.images?.[0]?.url || pet.images?.[0] || null;
+  const imgSrc = pet.imageUrl || pet.images?.[0]?.url || pet.images?.[0] || null;
   const species = (pet.species || '').toLowerCase();
 
   const chipStyles = {

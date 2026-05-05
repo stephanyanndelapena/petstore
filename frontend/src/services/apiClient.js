@@ -58,6 +58,7 @@ export async function getPets(query = {}) {
       availability_status: (it.availabilityStatus || it.availability_status || '').toLowerCase(),
       short_description: it.shortDescription || it.short_description || '',
       images: finalImages,
+      imageUrl: it.imageUrl,
       seller_id: it.sellerId || it.seller_id
     };
   });
@@ -73,6 +74,7 @@ export async function addPet(petData) {
     priceCents: Math.round(parseFloat(petData.priceCents || 0)),
     shortDescription: petData.shortDescription || '',
     availabilityStatus: petData.availabilityStatus || 'available',
+    imageUrl: petData.imageUrl || '',
     images: JSON.stringify(petData.images || [])
   };
 
@@ -99,6 +101,7 @@ export async function updatePet(id, petData) {
     priceCents: Math.round(parseFloat(petData.priceCents || 0)),
     shortDescription: petData.shortDescription || '',
     availabilityStatus: petData.availabilityStatus || 'available',
+    imageUrl: petData.imageUrl || '',
     images: JSON.stringify(petData.images || [])
   };
 

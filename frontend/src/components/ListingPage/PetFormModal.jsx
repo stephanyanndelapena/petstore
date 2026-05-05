@@ -7,7 +7,8 @@ export default function PetFormModal({ isOpen, onClose, onSubmit, pet }) {
     ageYears: '',
     priceCents: '',
     shortDescription: '',
-    availabilityStatus: 'available'
+    availabilityStatus: 'available',
+    imageUrl: ''
   });
 
   useEffect(() => {
@@ -18,7 +19,8 @@ export default function PetFormModal({ isOpen, onClose, onSubmit, pet }) {
         ageYears: pet.age || pet.ageYears || '',
         priceCents: pet.price != null ? Math.round(pet.price * 100) : (pet.priceCents || ''),
         shortDescription: pet.short_description || pet.shortDescription || '',
-        availabilityStatus: pet.availability_status || pet.availabilityStatus || 'available'
+        availabilityStatus: pet.availability_status || pet.availabilityStatus || 'available',
+        imageUrl: pet.imageUrl || ''
       });
     } else {
       setFormData({
@@ -27,7 +29,8 @@ export default function PetFormModal({ isOpen, onClose, onSubmit, pet }) {
         ageYears: '',
         priceCents: '',
         shortDescription: '',
-        availabilityStatus: 'available'
+        availabilityStatus: 'available',
+        imageUrl: ''
       });
     }
   }, [pet, isOpen]);
@@ -133,6 +136,17 @@ export default function PetFormModal({ isOpen, onClose, onSubmit, pet }) {
               placeholder="9999"
             />
             <p className="text-[10px] text-gray-400 mt-1">Enter price in cents (e.g., 9999 for $99.99)</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+            <input
+              name="imageUrl"
+              value={formData.imageUrl}
+              onChange={handleChange}
+              className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 outline-none"
+              placeholder="https://example.com/pet.jpg"
+            />
           </div>
 
           <div>
