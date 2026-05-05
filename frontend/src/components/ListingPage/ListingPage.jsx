@@ -1,16 +1,88 @@
 import React, { useEffect, useState } from 'react';
-import { getPets } from '../../services/apiClient';
+import { getPets, addPet, updatePet, deletePet } from '../../services/apiClient';
 import ListingCard from './ListingCard';
 import Filters from './Filters';
+import PetFormModal from './PetFormModal';
+import DeleteConfirmationModal from './DeleteConfirmationModal';
 
-export default function ListingPage({ onAddToCart }) {
+export default function ListingPage({ onAddToCart, showAddModal, onModalClose }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({});
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [editingPet, setEditingPet] = useState(null);
+  const [petToDelete, setPetToDelete] = useState(null);
   const LIMIT = 50;
+
+  useEffect(() => {
+    if (showAddModal) {
+      setEditingPet(null);
+      setIsModalOpen(true);
+    }
+  }, [showAddModal]);
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingPet(null);
+    if (onModalClose) onModalClose();
+  };
+
+  const handleEdit = (pet) => {
+    setEditingPet(pet);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = (id) => {
+    console.log('Delete click for id:', id);
+    const pet = items.find(it => it.id === id);
+    if (pet) {
+      console.log('Found pet to delete:', pet);
+      setPetToDelete(pet);
+      setIsDeleteModalOpen(true);
+    } else {
+      console.warn('Could not find pet with id:', id);
+    }
+  };
+
+  const handleDeleteConfirm = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (!petToDelete) return;
+    try {
+      await deletePet(petToDelete.id);
+      setItems(prev => prev.filter(item => item.id !== petToDelete.id));
+      setIsDeleteModalOpen(false);
+      setPetToDelete(null);
+      await load();
+    } catch (err) {
+      console.error('Failed to delete pet:', err);
+      setError('Failed to delete pet: ' + (err.message || String(err)));
+    }
+  };
+
+  const handleSubmit = async (formData) => {
+    console.log('Submitting form with data:', formData);
+    try {
+      if (editingPet) {
+        console.log('Updating pet:', editingPet.id);
+        await updatePet(editingPet.id, formData);
+      } else {
+        console.log('Adding new pet');
+        await addPet(formData);
+      }
+      await load();
+      handleCloseModal();
+    } catch (e) {
+      console.error('Failed to save pet:', e);
+      setError('Failed to save pet: ' + (e.message || String(e)));
+    }
+  };
 
   useEffect(() => {
     const handler = setTimeout(() => { setDebouncedSearch(search.trim()); }, 200);
@@ -96,6 +168,30 @@ export default function ListingPage({ onAddToCart }) {
 
         {/* Listings Grid Area */}
         <main style={{ flex: 1, minWidth: 0 }}>
+          {error && (
+            <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6 rounded-r-xl flex justify-between items-center shadow-sm">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-red-700 font-medium">
+                    {error}
+                  </p>
+                </div>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setError(null)}
+                className="text-red-400 hover:text-red-500 font-bold"
+              >
+                &times;
+              </button>
+            </div>
+          )}
+          
           <div style={{ marginBottom: '24px' }}>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', margin: 0, color: '#1E3A8A' }}>
               Available Listings
@@ -112,7 +208,13 @@ export default function ListingPage({ onAddToCart }) {
             gap: '24px' 
           }}>
             {items.map(it => (
-              <ListingCard key={it.id} pet={it} onAddToCart={onAddToCart} />
+              <ListingCard 
+                key={it.id} 
+                pet={it} 
+                onAddToCart={onAddToCart} 
+                onEdit={handleEdit} 
+                onDelete={handleDeleteClick} 
+              />
             ))}
           </div>
 
@@ -123,6 +225,21 @@ export default function ListingPage({ onAddToCart }) {
           )}
         </main>
       </div>
+
+      {/* Modals moved to bottom to detach from main layout flow */}
+      <PetFormModal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+        onSubmit={handleSubmit} 
+        pet={editingPet} 
+      />
+
+      <DeleteConfirmationModal 
+        isOpen={isDeleteModalOpen}
+        onCancel={() => { setIsDeleteModalOpen(false); setPetToDelete(null); }}
+        onConfirm={handleDeleteConfirm}
+        petName={petToDelete?.name}
+      />
     </div>
   );
 }

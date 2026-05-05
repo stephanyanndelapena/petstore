@@ -52,6 +52,7 @@ export default function App() {
     return saved ? JSON.parse(saved) : [];
   });
   const [view, setView] = useState('hub');
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('petstore-cart', JSON.stringify(cart));
@@ -100,24 +101,49 @@ export default function App() {
         >
           PETSTORE
         </div>
-        <div 
-          onClick={() => setView('cart')}
-          style={{ 
-            backgroundColor: '#D4A017', 
-            padding: '8px 16px', 
-            borderRadius: '12px', 
-            fontSize: '0.875rem', 
-            fontWeight: 'bold',
-            cursor: 'pointer'
-          }}
-        >
-          Cart ({cartCount})
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <button 
+            type="button"
+            onClick={() => {
+              setView('hub');
+              setShowAddModal(true);
+            }}
+            style={{ 
+              backgroundColor: '#1E3A8A', 
+              color: 'white',
+              padding: '8px 16px', 
+              borderRadius: '12px', 
+              fontSize: '0.875rem', 
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              border: 'none'
+            }}
+          >
+            Add Pet
+          </button>
+          <div 
+            onClick={() => setView('cart')}
+            style={{ 
+              backgroundColor: '#D4A017', 
+              padding: '8px 16px', 
+              borderRadius: '12px', 
+              fontSize: '0.875rem', 
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
+            Cart ({cartCount})
+          </div>
         </div>
       </nav>
 
       <main>
         {view === 'hub' ? (
-          <ListingPage onAddToCart={addToCart} />
+          <ListingPage 
+            onAddToCart={addToCart} 
+            showAddModal={showAddModal} 
+            onModalClose={() => setShowAddModal(false)} 
+          />
         ) : (
           <CartPage 
             cart={cart} 

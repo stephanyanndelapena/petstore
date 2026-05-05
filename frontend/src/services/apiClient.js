@@ -64,3 +64,68 @@ export async function getPets(query = {}) {
 
   return { items, pagination: json.pagination || { next_cursor: null, has_more: false }, filters_applied: json.filters_applied || {} };
 }
+
+export async function addPet(petData) {
+  const body = {
+    name: petData.name,
+    species: (petData.species || '').toUpperCase(),
+    ageYears: parseInt(petData.ageYears || 0),
+    priceCents: Math.round(parseFloat(petData.priceCents || 0)),
+    shortDescription: petData.shortDescription || '',
+    availabilityStatus: petData.availabilityStatus || 'available',
+    images: JSON.stringify(petData.images || [])
+  };
+
+  console.log('Adding pet with body:', body);
+
+  const res = await fetch(`${API_BASE}/pets`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.message || `Failed to add pet: ${res.status}`);
+  }
+  return res.json();
+}
+
+export async function updatePet(id, petData) {
+  const body = {
+    name: petData.name,
+    species: (petData.species || '').toUpperCase(),
+    ageYears: parseInt(petData.ageYears || 0),
+    priceCents: Math.round(parseFloat(petData.priceCents || 0)),
+    shortDescription: petData.shortDescription || '',
+    availabilityStatus: petData.availabilityStatus || 'available',
+    images: JSON.stringify(petData.images || [])
+  };
+
+  console.log(`Updating pet ${id} with body:`, body);
+
+  const res = await fetch(`${API_BASE}/pets/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.message || `Failed to update pet: ${res.status}`);
+  }
+  return res.json();
+}
+
+export async function deletePet(id) {
+  console.log(`Deleting pet ${id}`);
+  const res = await fetch(`${API_BASE}/pets/${id}`, {
+    method: 'DELETE'
+  });
+  
+  if (!res.ok && res.status !== 204) {
+    const errData = await res.json().catch(() => ({}));
+    throw new Error(errData.message || `Failed to delete pet: ${res.status}`);
+  }
+  return true;
+}
