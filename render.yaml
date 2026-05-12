@@ -9,10 +9,10 @@ databases:
 services:
   - type: web
     name: petstore-backend
-    env: java
+    runtime: docker
     region: oregon
-    buildCommand: mvn -f backend -DskipTests package
-    startCommand: java -jar backend/target/petstore-backend-0.1.0-SNAPSHOT.jar
+    dockerContext: .
+    dockerfilePath: backend/Dockerfile
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
@@ -25,7 +25,6 @@ services:
   - type: web
     name: petstore-frontend
     runtime: static
-    region: oregon
     buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/dist
     plan: starter
