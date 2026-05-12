@@ -4,7 +4,7 @@
 databases:
   - name: petstore-db
     postgresMajorVersion: "15"
-    plan: starter
+    plan: free
 
 services:
   - type: web
@@ -20,11 +20,10 @@ services:
         fromDatabase:
           name: petstore-db
           property: connectionString
-    plan: starter
+    plan: free
 
   - type: web
     name: petstore-frontend
     runtime: static
     buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/dist
-    plan: starter
