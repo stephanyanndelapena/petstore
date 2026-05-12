@@ -16,6 +16,8 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
+      - key: ALLOWED_ORIGINS
+        value: https://petstore-frontend-cpmu.onrender.com
       - key: DB_HOST
         fromDatabase:
           name: petstore-db
@@ -44,3 +46,6 @@ services:
     runtime: static
     buildCommand: cd frontend && npm ci && npm run build
     staticPublishPath: frontend/dist
+    envVars:
+      - key: VITE_API_BASE
+        value: https://petstore-backend-erzd.onrender.com/delapena/v1
