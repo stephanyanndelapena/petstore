@@ -16,11 +16,28 @@ services:
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: render
-      - key: DATABASE_URL
+      - key: DB_HOST
         fromDatabase:
           name: petstore-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: petstore-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: petstore-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: petstore-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: petstore-db
+          property: password
     plan: free
+
 
   - type: web
     name: petstore-frontend
