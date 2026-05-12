@@ -4,7 +4,7 @@ WORKDIR /app
 COPY backend /app
 RUN mvn -f /app -DskipTests package
 
-FROM openjdk:17-jdk-slim
+FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 # Copy built jar(s)
 COPY --from=build /app/backend/target/*.jar app.jar
